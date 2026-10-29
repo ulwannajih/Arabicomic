@@ -1,0 +1,167 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile data for Arabic comic learners and admins",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The UID of the user"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the user"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the user"
+        },
+        "role": {
+          "type": "string",
+          "description": "Role of the user: student or admin",
+          "enum": ["student", "admin"]
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "Avatar URL"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last updated timestamp"
+        }
+      },
+      "required": ["userId", "email", "role"]
+    },
+    "UserProgress": {
+      "title": "UserProgress",
+      "description": "Tracks learner progress across comic episodes and quizzes",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "User ID owning the progress"
+        },
+        "completedEpisodes": {
+          "type": "array",
+          "description": "Array of episode IDs completed"
+        },
+        "totalScore": {
+          "type": "number",
+          "description": "Accumulated quiz score"
+        },
+        "stars": {
+          "type": "number",
+          "description": "Total stars earned"
+        },
+        "currentLevel": {
+          "type": "string",
+          "description": "Current learner badge level"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp of last update"
+        }
+      },
+      "required": ["userId", "completedEpisodes", "totalScore", "stars"]
+    },
+    "SavedVocabulary": {
+      "title": "SavedVocabulary",
+      "description": "Vocabulary items saved by the learner for study",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "User ID owning the saved vocabulary"
+        },
+        "arabic": {
+          "type": "string",
+          "description": "Arabic text with harakat"
+        },
+        "transliteration": {
+          "type": "string",
+          "description": "Latin phonetic transliteration"
+        },
+        "indonesian": {
+          "type": "string",
+          "description": "Indonesian translation"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category or episode context"
+        },
+        "episodeId": {
+          "type": "string",
+          "description": "Origin episode identifier"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when added"
+        }
+      },
+      "required": ["userId", "arabic", "indonesian"]
+    },
+    "QuizAttempt": {
+      "title": "QuizAttempt",
+      "description": "Record of a completed quiz session",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "User ID who took the quiz"
+        },
+        "episodeId": {
+          "type": "string",
+          "description": "Episode quiz was taken for"
+        },
+        "score": {
+          "type": "number",
+          "description": "Score achieved (0-100)"
+        },
+        "totalQuestions": {
+          "type": "number",
+          "description": "Total number of questions"
+        },
+        "correctCount": {
+          "type": "number",
+          "description": "Number of correct answers"
+        },
+        "completedAt": {
+          "type": "string",
+          "description": "Timestamp of completion"
+        }
+      },
+      "required": ["userId", "episodeId", "score"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "User profile document"
+    },
+    "/users/{userId}/progress/{progressId}": {
+      "schema": {
+        "$ref": "#/entities/UserProgress"
+      },
+      "description": "Learning progress statistics for user"
+    },
+    "/users/{userId}/vocabulary/{vocabId}": {
+      "schema": {
+        "$ref": "#/entities/SavedVocabulary"
+      },
+      "description": "User saved vocabulary notebook"
+    },
+    "/users/{userId}/quizAttempts/{attemptId}": {
+      "schema": {
+        "$ref": "#/entities/QuizAttempt"
+      },
+      "description": "User quiz attempt history"
+    }
+  }
+}

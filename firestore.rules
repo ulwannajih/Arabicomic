@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all: tolak akses secara global untuk keamanan zero-trust
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper: memeriksa apakah pengguna telah melakukan otentikasi
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Helper: memastikan UID pengguna sesuai dengan dokumen target
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Aturan untuk dokumen pengguna: setiap user HANYA bisa membaca dan menulis datanya sendiri
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      // Seluruh subkoleksi data pengguna (progress, vocabulary, quizAttempts, dsb.)
+      // HANYA bisa diakses (baca & tulis) oleh pengguna yang bersangkutan
+      match /{allSubcollections=**} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+  }
+}

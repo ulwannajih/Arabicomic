@@ -1,0 +1,6 @@
+{
+  "name": "Komik Arab Yaumiyyatuna",
+  "description": "Aplikasi komik interaktif pembelajaran bahasa Arab bertema Yaumiyyatuna (يَوْمِيَّاتُنَا - Kegiatan Sehari-hari) lengkap dengan audio harakat, kuis interaktif, catatan mufradat, dan AI tutor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
